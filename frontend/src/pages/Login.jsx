@@ -18,10 +18,13 @@ const Login = () => {
     // TODO: Add authentication logic here
 
     try {
-      const res = await axios.post("http://localhost:3000/api/auth/login", {
-        username,
-        password,
-      })
+    // Register
+// Login
+const res = await axios.post(
+  "http://localhost:3000/api/auth/login",
+  { username, password },
+  { withCredentials: true } // <- important
+);
 
       if (res.status === 200) {
         toast.success("Login successful ✅")

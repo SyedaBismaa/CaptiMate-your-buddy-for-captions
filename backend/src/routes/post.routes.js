@@ -13,4 +13,9 @@ router.post('/',
     createPostController
 )
 
+router.get('/', authMiddleware, (req, res) => {
+    // You can return a simple message
+    return res.status(200).json({ message: `Authenticated as ${req.user.username}` });
+  });
+  
 module.exports = router;

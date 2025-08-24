@@ -24,7 +24,11 @@ async function registerController(req,res){
         id:user._id
     },process.env.JWT_SECRET);
 
-    res.cookie("token",token)
+    res.cookie("token", token, {
+        httpOnly: true,
+        secure: true,       // must be true if sameSite = none
+        sameSite: "none",   // required for cross-origin cookies
+      });
 
     return res.status(201).json({
         message:"User ragistred Sucessfully",
@@ -55,7 +59,11 @@ async function loginController(req,res){
         })
     }
   const token = jwt.sign({id:user._id}, process.env.JWT_SECRET);
-  res.cookie("token",token);
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: true,       // must be true if sameSite = none
+    sameSite: "none",   // required for cross-origin cookies
+  });
   res.status(200).json({
     message:"user Logged in sucessfully",
     user:{

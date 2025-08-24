@@ -15,11 +15,12 @@ function Register() {
     e.preventDefault()
     try {
       // 👇 adjust this URL to match your backend
-      const res = await axios.post("http://localhost:3000/api/auth/register", {
-        username,
-        password,
-      })
-
+      const res = await axios.post(
+        "http://localhost:3000/api/auth/register",
+        { username, password },
+        { withCredentials: true } // <- important
+      );
+      
       if (res.status === 201) {
         toast.success("User registered successfully ✅")
         setUsername("")
