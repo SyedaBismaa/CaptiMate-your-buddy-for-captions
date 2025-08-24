@@ -1,16 +1,39 @@
 import React, { useState } from "react";
+import axios from "axios"
+import { toast } from "react-toastify"
+import { useNavigate } from "react-router-dom"
 
 // Login page component
 const Login = () => {
   // State for form fields
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+
+  const navigate = useNavigate()
+
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // TODO: Add authentication logic here
-    console.log("Login:", { email, password });
+
+    try {
+      const res = await axios.post("http://localhost:3000/api/auth/login", {
+        username,
+        password,
+      })
+
+      if (res.status === 200) {
+        toast.success("Login successful ✅")
+        // setUsername("")
+        // setPassword("")
+        navigate("/")
+      }
+    } catch (err) {
+      console.error(err)
+      toast.error(err.response?.data?.message || "Login failed ❌")
+    }
+
   };
 
   return (
@@ -22,13 +45,13 @@ const Login = () => {
         <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
         <div className="mb-4">
           <label className="block mb-2 text-sm font-medium text-gray-700">
-            Email
+            Username
           </label>
           <input
-            type="email"
+            type="text"
             className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             required
             autoComplete="username"
           />

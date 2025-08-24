@@ -1,11 +1,14 @@
 import React, { useState } from "react"
 import axios from "axios"
 import { toast } from "react-toastify"
+import { useNavigate } from "react-router-dom"
 
 function Register() {
   // form states
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
+  const navigate = useNavigate()
+
 
   // handle form submit
   const handleRegister = async (e) => {
@@ -21,6 +24,7 @@ function Register() {
         toast.success("User registered successfully ✅")
         setUsername("")
         setPassword("")
+        navigate("/login");
       }
     } catch (err) {
       console.error(err)
