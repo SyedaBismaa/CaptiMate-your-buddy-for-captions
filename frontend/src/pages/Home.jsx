@@ -86,6 +86,14 @@ const Home = () => {
     }
   };
 
+  // Copy caption to clipboard
+  const handleCopyCaption = () => {
+    if (!generatedCaption) return;
+    navigator.clipboard.writeText(generatedCaption)
+      .then(() => toast.success("Caption copied to clipboard! 📋"))
+      .catch(() => toast.error("Failed to copy caption ❌"));
+  };
+
   // Clear selection
   const handleClear = () => {
     setSelectedImage(null);
@@ -116,7 +124,6 @@ const Home = () => {
           <div className="flex justify-between items-center mb-4">
             <div></div> {/* Empty div for spacing */}
             <div className="flex items-center gap-3">
-              
               {/* Logout Button */}
               <button
                 onClick={handleLogout}
@@ -128,17 +135,9 @@ const Home = () => {
           </div>
           
           <h1 className="text-4xl font-bold text-gray-800 mb-2">Snapcap 
-            <span className="text-gray-600  text-3xl  font-medium  "> — your buddy for captions!</span>
-            </h1>
+            <span className="text-gray-600  text-3xl  font-medium"> — your buddy for captions!</span>
+          </h1>
           <p className="text-gray-600 pt-3 pb-2">Upload an image and let AI create a creative caption for you!</p>
-          
-          {/* Simple Info */}
-          <div className="mt-4">
-            <div className="inline-flex items-center px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
-              <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-              Ready to Generate Captions!
-            </div>
-          </div>
         </div>
 
         {/* Auth Status */}
@@ -158,13 +157,25 @@ const Home = () => {
         <div className="bg-white p-6 rounded-lg shadow-md mb-6">
           <label className="block text-sm font-medium text-gray-700 mb-2">Select Image</label>
           <div className="flex justify-center">
-            <label className="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 bg-gray-50">
+            <label className="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-blue-300 rounded-lg cursor-pointer hover:bg-gray-100 bg-gray-50">
               {imagePreview ? (
-                <img
-                  src={imagePreview}
-                  alt="Preview"
-                  className="max-h-48 max-w-full object-contain rounded"
-                />
+                <div className="relative w-full h-full flex items-center justify-center">
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="max-h-48 max-w-full object-contain rounded"
+                  />
+                  <div className="absolute top-2 right-2">
+                    <button
+                      onClick={handleClear}
+                      className="p-2 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-lg transition-all duration-200"
+                    >
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
               ) : (
                 <p className="text-gray-500 text-center mt-20">
                   Click to upload or drag & drop
@@ -175,7 +186,7 @@ const Home = () => {
           </div>
 
           {/* Buttons */}
-          <div className="flex justify-center gap-4 mt-4">
+          <div className="flex justify-center mt-4">
             <button
               onClick={handleGenerateCaption}
               disabled={!selectedImage || isLoading}
@@ -185,22 +196,28 @@ const Home = () => {
             >
               {isLoading ? "Generating..." : "Generate Caption"}
             </button>
-            {selectedImage && (
-              <button
-                onClick={handleClear}
-                className="px-6 py-2 rounded-lg bg-gray-500 text-white hover:bg-gray-600"
-              >
-                Clear
-              </button>
-            )}
           </div>
         </div>
 
         {/* Generated Caption */}
         {isCaptionGenerated && (
-          <div className="bg-white p-6 rounded-lg shadow-md">
+          <div className="bg-white px-6 py-1 rounded-lg shadow-md text-center">
             <h2 className="text-2xl font-bold mb-2">Generated Caption</h2>
-            <p className="italic text-gray-700">{generatedCaption}</p>
+            <p className="italic text-gray-700 mb-4">{generatedCaption}</p>
+            <button
+  onClick={() => {
+    navigator.clipboard.writeText(generatedCaption);
+    toast.success('Caption copied to clipboard! 📋');
+  }}
+  className="mt-3 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 inline-flex items-center"
+>
+  <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+    <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
+    <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
+  </svg>
+  Copy Caption
+</button>
+
           </div>
         )}
       </div>
