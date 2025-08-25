@@ -1,83 +1,83 @@
 
 const userModel = require("../models/user.model")
 const jwt = require("jsonwebtoken")
-const bcrypt= require("bcryptjs")
+const bcrypt = require("bcryptjs")
 
 
-async function registerController(req,res){
-    const{username,password} =req.body;
+async function registerController(req, res) {
+    const { username, password } = req.body;
 
-    const isUserAlreadyExists = await userModel.findOne({username});
+    const isUserAlreadyExists = await userModel.findOne({ username });
 
-    if(isUserAlreadyExists){
+    if (isUserAlreadyExists) {
         return res.status(400).json({
-            message:"User already exist"
+            message: "User already exist"
         })
     }
 
     const user = await userModel.create({
         username,
-        password:await bcrypt.hash(password,10)
+        password: await bcrypt.hash(password, 10)
     })
 
     const token = jwt.sign({
-        id:user._id
-    },process.env.JWT_SECRET);
+        id: user._id
+    }, process.env.JWT_SECRET);
 
     res.cookie("token", token, {
         httpOnly: true,
         secure: true,       // must be true if sameSite = none
         sameSite: "none",   // required for cross-origin cookies
-      });
+    });
 
     return res.status(201).json({
-        message:"User ragistred Sucessfully",
+        message: "User ragistred Sucessfully",
         user,
     })
 
 
 }
 
-async function loginController(req,res){
-    const {username,password} = req.body;
+async function loginController(req, res) {
+    const { username, password } = req.body;
 
     const user = await userModel.findOne({
         username
     })
 
-    if(!user){
+    if (!user) {
         return res.status(400).json({
-            message:"user not found"
+            message: "user not found"
         })
     }
 
-    const isPasswordValid = await bcrypt.compare(password , user.password)
+    const isPasswordValid = await bcrypt.compare(password, user.password)
 
-    if(!isPasswordValid){
+    if (!isPasswordValid) {
         return res.status(400).json({
-            message:"Invalid Password"
+            message: "Invalid Password"
         })
     }
-  const token = jwt.sign({id:user._id}, process.env.JWT_SECRET);
-  res.cookie("token", token, {
-    httpOnly: true,
-    secure: true,       // must be true if sameSite = none
-    sameSite: "none",   // required for cross-origin cookies
-  });
-  res.status(200).json({
-    message:"user Logged in sucessfully",
-    user:{
-        username:user.username,
-        id:user._id
-    }
-  })
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    res.cookie("token", token, {
+        httpOnly: true,
+        secure: true,       // must be true if sameSite = none
+        sameSite: "none",   // required for cross-origin cookies
+    });
+    res.status(200).json({
+        message: "user Logged in sucessfully",
+        user: {
+            username: user.username,
+            id: user._id
+        }
+    })
 
 }
 
-async function logoutController(req,res){
+async function logoutController(req, res) {
     res.clearCookie("token");
     res.status(200).json({
-        message:"User Logged out sucessfully"
+        message: "User Logged out sucessfully"
     })
 }
 module.exports = {

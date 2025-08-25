@@ -7,24 +7,18 @@ const postRoutes = require('./routes/post.routes')
 
 const app = express()
 
-// // Enable CORS for all routes
-// app.use(cors({
-//   origin: 'http://localhost:5173', // Vite default port
-//   credentials: true
-// }));
-
 
 app.use(
-    cors({
-      origin: "http://localhost:5173", // frontend URL
-      credentials: true,               // allow cookies
-    })
-  );
+  cors({
+    origin: "http://localhost:5173", // frontend URL
+    credentials: true,               // allow cookies
+  })
+);
 app.use(cookieParser());
 app.use(express.json());
 
 
 app.use('/api/auth', authRoutes);
-app.use('/api/posts',postRoutes )
+app.use('/api/posts', postRoutes)
 
 module.exports = app;
