@@ -16,7 +16,7 @@ function Register() {
     setIsLoading(true)
     
     try {
-      const res = await axios.post("http://localhost:3000/api/auth/register", {
+      const res = await axios.post("https://snapcap-your-buddy-for-captions.onrender.com/api/auth/register", {
         username,
         password,
       }, { withCredentials: true })
