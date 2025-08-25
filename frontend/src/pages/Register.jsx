@@ -78,6 +78,7 @@ function Register() {
         >
           Register
         </button>
+        <p className="text-center pt-4  text-gray-800">Already have an account? <span className="text-blue-700"><a href="/login">Login Here</a></span ></p>
       </form>
     </div>
   )

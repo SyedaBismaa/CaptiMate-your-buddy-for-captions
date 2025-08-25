@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useNavigate } from 'react-router-dom'
 
+// Home page component
 const Home = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -9,6 +11,7 @@ const Home = () => {
   const [isCaptionGenerated, setIsCaptionGenerated] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate()
 
   // Check authentication on mount
   useEffect(() => {
@@ -91,13 +94,52 @@ const Home = () => {
     setIsCaptionGenerated(false);
   };
 
+  // Handle logout
+  const handleLogout = async () => {
+    try {
+      await axios.post('http://localhost:3000/api/auth/logout', {}, {
+        withCredentials: true
+      })
+      toast.success('Logged out successfully! 👋')
+      navigate('/login')
+    } catch (error) {
+      console.error('Logout error:', error)
+      toast.error('Logout failed. Please try again.')
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-4">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold text-center mb-6">AI Caption Generator</h1>
-        <p className="text-center text-gray-600 mb-8">
-          Upload an image and get a creative caption generated automatically.
-        </p>
+        {/* Header */}
+        <div className="text-center mb-8">
+          <div className="flex justify-between items-center mb-4">
+            <div></div> {/* Empty div for spacing */}
+            <div className="flex items-center gap-3">
+              
+              {/* Logout Button */}
+              <button
+                onClick={handleLogout}
+                className="px-5 py-1 bg-red-200 rounded-full hover:bg-red-400 transition-colors text-sm"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+          
+          <h1 className="text-4xl font-bold text-gray-800 mb-2">Snapcap 
+            <span className="text-gray-600  text-3xl  font-medium  "> — your buddy for captions!</span>
+            </h1>
+          <p className="text-gray-600 pt-3 pb-2">Upload an image and let AI create a creative caption for you!</p>
+          
+          {/* Simple Info */}
+          <div className="mt-4">
+            <div className="inline-flex items-center px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
+              <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+              Ready to Generate Captions!
+            </div>
+          </div>
+        </div>
 
         {/* Auth Status */}
         <div className="text-center mb-6">
@@ -107,7 +149,7 @@ const Home = () => {
             </span>
           ) : (
             <span className="px-3 py-1 bg-red-100 text-red-800 rounded-full">
-              Not Logged In
+              Not Logged In <span className="rounded-full px-2 bg-red-200"><a href="/login">Click here to Login</a></span>
             </span>
           )}
         </div>

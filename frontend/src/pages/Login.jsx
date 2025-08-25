@@ -78,6 +78,7 @@ const res = await axios.post(
         >
           Login
         </button>
+        <p className="text-center pt-4  text-gray-800">Don't have an account? <span className="text-blue-700"><a href="/register">Register Here</a></span></p>
       </form>
     </div>
   );
