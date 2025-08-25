@@ -10,7 +10,7 @@ const app = express()
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // frontend URL
+    origin: ["http://localhost:5173", "https://snapcap.vercel.app"], // frontend URL
     credentials: true,               // allow cookies
   })
 );
