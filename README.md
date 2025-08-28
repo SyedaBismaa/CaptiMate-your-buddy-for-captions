@@ -30,7 +30,4 @@ Upload an image, get an instant caption, and keep your uploads organized in the 
 Developed with ❤️ SyedaBismaa
 
 
-
-   
-   git clone https://github.com/your-username/snapcap.git
    cd snapcap
