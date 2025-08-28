@@ -28,6 +28,3 @@ Upload an image, get an instant caption, and keep your uploads organized in the 
 ---
 
 Developed with ❤️ SyedaBismaa
-
-
-   cd snapcap
